@@ -2,740 +2,395 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="mobile-web-app-capable" content="yes" />
-  <title>Présentation Partenaires — Les Éditions Spiritueuses</title>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Les Éditions Spiritueuses — Présentation 2026</title>
   <style>
-    :root {
-      --bg: #081525;
-      --panel: rgba(10, 22, 38, 0.68);
-      --gold: #d6b16d;
-      --gold-soft: rgba(214, 177, 109, 0.34);
-      --text: #f3ecd9;
-      --muted: rgba(243, 236, 217, 0.72);
-      --shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+    :root{
+      --bg:#06111f;
+      --panel:rgba(8,18,32,.50);
+      --panel-border:rgba(212,171,94,.20);
+      --gold:#d4ab5e;
+      --gold-soft:rgba(212,171,94,.38);
+      --text:#f4efe3;
+      --top-safe:max(env(safe-area-inset-top), 12px);
+      --bottom-safe:max(env(safe-area-inset-bottom), 12px);
+      --app-height:100vh;
+      --progress:0%;
     }
-
-    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    html, body {
-      margin: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    html,body{
+      margin:0;width:100%;height:100%;overflow:hidden;background:#000;
+      touch-action:manipulation;overscroll-behavior:none;
+    }
+    body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--text)}
+    #app{
+      position:fixed;inset:0;width:100%;height:var(--app-height);overflow:hidden;
       background:
-        radial-gradient(circle at top, rgba(24, 47, 79, 0.45), transparent 40%),
-        linear-gradient(180deg, #0b1d31 0%, var(--bg) 100%);
-      color: var(--text);
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        radial-gradient(circle at 50% 45%, rgba(255,255,255,.03), transparent 35%),
+        linear-gradient(180deg, #02060d 0%, #071426 60%, #02060d 100%);
     }
-
-    body { position: fixed; inset: 0; }
-
-    .app {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+    #viewer{
+      position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+      padding:calc(var(--top-safe) + 52px) clamp(10px, 1.6vw, 20px) calc(var(--bottom-safe) + 14px) clamp(10px, 1.6vw, 20px);
     }
-
-    .topbar {
-      position: absolute;
-      top: max(14px, env(safe-area-inset-top));
-      left: max(16px, env(safe-area-inset-left));
-      right: max(16px, env(safe-area-inset-right));
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      z-index: 20;
-      pointer-events: none;
+    #stage{
+      position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;
+      perspective:1600px;overflow:hidden;
     }
-
-    .brand, .status {
-      background: var(--panel);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(214, 177, 109, 0.18);
-      border-radius: 999px;
-      padding: 10px 14px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
-      pointer-events: auto;
+    #slide-wrap{
+      position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;overflow:hidden;
     }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      min-width: 0;
+    #slide{
+      display:block;max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;
+      border-radius:10px;
+      box-shadow:0 30px 80px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.03);
+      transform-origin:center center;will-change:transform, opacity, filter;
+      user-select:none;-webkit-user-drag:none;touch-action:none;background:#091322;
+      transition:transform .18s linear;
     }
-
-    .brand-mark {
-      width: 10px;
-      height: 10px;
-      border-radius: 999px;
-      background: var(--gold);
-      box-shadow: 0 0 18px rgba(214, 177, 109, 0.65);
-      flex: 0 0 auto;
+    .cinema-out{animation:cinemaOut .34s cubic-bezier(.4,0,.2,1) forwards}
+    .cinema-in{animation:cinemaIn .42s cubic-bezier(.18,.78,.22,1) forwards}
+    @keyframes cinemaOut{
+      0%{opacity:1;transform:translateX(0) scale(1) rotateY(0deg);filter:blur(0)}
+      100%{opacity:.08;transform:translateX(-32px) scale(.975) rotateY(9deg);filter:blur(10px)}
     }
-
-    .brand-text {
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--text);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+    @keyframes cinemaIn{
+      0%{opacity:.08;transform:translateX(32px) scale(1.025) rotateY(-9deg);filter:blur(10px)}
+      100%{opacity:1;transform:translateX(0) scale(1) rotateY(0deg);filter:blur(0)}
     }
-
-    .status {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1;
+    .hud{
+      position:absolute;left:0;right:0;top:0;z-index:20;pointer-events:none;
+      padding:calc(var(--top-safe) + 8px) clamp(12px, 1.8vw, 22px) 0;
     }
-
-    .status strong {
-      color: var(--gold);
-      font-size: 13px;
-      letter-spacing: 0.12em;
+    .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}
+    .brand,.counter{
+      pointer-events:auto;background:var(--panel);border:1px solid var(--panel-border);
+      backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-radius:999px;
+      padding:9px 14px;line-height:1;box-shadow:0 8px 24px rgba(0,0,0,.22);
     }
-
-    .viewer {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      perspective: 1800px;
-      touch-action: pan-y pinch-zoom;
+    .brand{
+      font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:rgba(244,239,227,.85);
+      white-space:nowrap;max-width:70vw;overflow:hidden;text-overflow:ellipsis;
     }
-
-    .stage {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      border-radius: 24px;
+    .counter{font-size:12px;letter-spacing:.14em;color:var(--gold);font-weight:700;font-variant-numeric:tabular-nums}
+    #progress-track{
+      position:relative;width:min(420px, calc(100vw - 36px));max-width:100%;height:4px;margin:0 auto;
+      border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden;box-shadow:0 1px 0 rgba(255,255,255,.06) inset;
     }
-
-    .film {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      opacity: 0;
-      z-index: 7;
-      background:
-        linear-gradient(180deg, rgba(0,0,0,.58), transparent 16%, transparent 84%, rgba(0,0,0,.58)),
-        linear-gradient(90deg, rgba(0,0,0,.35), transparent 8%, transparent 92%, rgba(0,0,0,.35));
-      transition: opacity .28s ease;
+    #progress-bar{
+      position:absolute;inset:0 auto 0 0;width:var(--progress);border-radius:999px;
+      background:linear-gradient(90deg, rgba(212,171,94,.55) 0%, rgba(212,171,94,1) 65%, rgba(245,226,183,1) 100%);
+      box-shadow:0 0 18px rgba(212,171,94,.35);transition:width .28s ease;
     }
-
-    .stage.cinematic .film { opacity: 1; }
-
-    .slide-shell {
-      position: relative;
-      z-index: 5;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transform-style: preserve-3d;
+    .nav{
+      position:absolute;top:50%;transform:translateY(-50%);width:54px;height:54px;border-radius:50%;
+      border:1px solid var(--gold-soft);background:rgba(4,12,22,.32);color:var(--gold);
+      backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;
+      font-size:22px;cursor:pointer;z-index:15;user-select:none;
+      transition:transform .15s ease, background .2s ease, opacity .2s ease, border-color .2s ease;
+      box-shadow:0 10px 30px rgba(0,0,0,.22);
     }
-
-    .slide {
-      max-width: 100%;
-      max-height: 100%;
-      width: auto;
-      height: auto;
-      object-fit: contain;
-      user-select: none;
-      -webkit-user-drag: none;
-      transform-origin: center center;
-      transition:
-        transform 280ms ease,
-        opacity 280ms ease,
-        filter 280ms ease;
-      box-shadow: var(--shadow);
-      border-radius: 14px;
-      background: #0f2035;
+    .nav:hover{transform:translateY(-50%) scale(1.04);background:rgba(212,171,94,.10);border-color:rgba(212,171,94,.65)}
+    .nav:active{transform:translateY(-50%) scale(.98)}
+    .nav:disabled{opacity:.25;cursor:default}
+    #prev{left:clamp(10px, 1.5vw, 20px)}
+    #next{right:clamp(10px, 1.5vw, 20px)}
+    #hint{
+      position:absolute;right:clamp(12px, 1.8vw, 22px);bottom:calc(var(--bottom-safe) + 8px);z-index:18;
+      background:rgba(5,14,24,.36);border:1px solid rgba(212,171,94,.12);color:rgba(244,239,227,.58);
+      font-size:11px;line-height:1;letter-spacing:.08em;border-radius:999px;padding:10px 12px;
+      backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);pointer-events:none;
     }
-
-    .stage.cinematic .slide {
-      animation: cinemaOut .38s ease forwards;
-      filter: brightness(.9) saturate(.96);
+    #fullscreen-tip,#zoom-badge{
+      position:absolute;left:50%;bottom:calc(var(--bottom-safe) + 8px);transform:translateX(-50%);z-index:19;
+      border-radius:999px;padding:10px 14px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+      max-width:calc(100vw - 24px);text-align:center;pointer-events:none;
     }
-
-    .stage.ready .slide {
-      animation: cinemaIn .48s cubic-bezier(.2,.85,.25,1) forwards;
-      filter: brightness(1) saturate(1);
+    #fullscreen-tip{
+      background:rgba(5,14,24,.6);border:1px solid rgba(212,171,94,.2);color:rgba(244,239,227,.82);
+      font-size:12px;line-height:1.25;transition:opacity .25s ease, transform .25s ease;
     }
-
-    @keyframes cinemaOut {
-      0% { opacity: 1; transform: translateZ(0) scale(1); }
-      100% { opacity: 0; transform: translateZ(-180px) scale(.95); }
+    #fullscreen-tip.hidden{opacity:0;transform:translateX(-50%) translateY(12px)}
+    #zoom-badge{
+      background:rgba(5,14,24,.62);border:1px solid rgba(212,171,94,.24);color:var(--gold);
+      font-size:12px;font-weight:700;letter-spacing:.1em;opacity:0;transition:opacity .2s ease;
     }
-
-    @keyframes cinemaIn {
-      0% { opacity: 0; transform: translateZ(180px) scale(1.04); }
-      100% { opacity: 1; transform: translateZ(0) scale(1); }
+    #zoom-badge.show{opacity:1}
+    @media (max-width:900px){
+      .brand{font-size:11px;letter-spacing:.14em}.counter{font-size:11px}.nav{width:46px;height:46px;font-size:18px}#hint{display:none}
     }
-
-    .nav {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 15;
-      width: 56px;
-      height: 56px;
-      border: 1px solid rgba(214, 177, 109, 0.4);
-      border-radius: 999px;
-      background: rgba(8, 21, 37, 0.58);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      color: var(--gold);
-      display: grid;
-      place-items: center;
-      cursor: pointer;
-      transition: transform .2s ease, background .2s ease, opacity .2s ease;
-      box-shadow: 0 12px 26px rgba(0, 0, 0, .22);
+    @media (max-width:640px){
+      #viewer{padding:calc(var(--top-safe) + 44px) 8px calc(var(--bottom-safe) + 8px) 8px}
+      #slide{border-radius:8px}.nav{width:42px;height:42px;font-size:17px}.brand{max-width:62vw}
+      #progress-track{width:min(360px, calc(100vw - 24px));height:3px}
     }
-
-    .nav:hover { background: rgba(8, 21, 37, 0.82); transform: translateY(-50%) scale(1.04); }
-    .nav:active { transform: translateY(-50%) scale(.98); }
-    .nav[disabled] { opacity: .35; cursor: default; }
-    .nav svg { width: 22px; height: 22px; }
-    .nav.prev { left: 18px; }
-    .nav.next { right: 18px; }
-
-    .bottombar {
-      position: absolute;
-      left: max(16px, env(safe-area-inset-left));
-      right: max(16px, env(safe-area-inset-right));
-      bottom: max(14px, env(safe-area-inset-bottom));
-      z-index: 20;
-      display: grid;
-      gap: 10px;
-    }
-
-    .progress-wrap {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(214, 177, 109, 0.16);
-      border-radius: 999px;
-      padding: 6px;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      box-shadow: 0 10px 30px rgba(0,0,0,.22);
-    }
-
-    .progress-track {
-      position: relative;
-      width: 100%;
-      height: 6px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.06);
-      overflow: hidden;
-    }
-
-    .progress-fill {
-      position: absolute;
-      inset: 0 auto 0 0;
-      width: 0%;
-      border-radius: inherit;
-      background: linear-gradient(90deg, #b88d45 0%, #d6b16d 45%, #f0d69d 100%);
-      box-shadow: 0 0 18px rgba(214, 177, 109, .5);
-      transition: width .36s cubic-bezier(.2,.8,.2,1);
-    }
-
-    .progress-glow {
-      position: absolute;
-      inset: -14px auto -14px 0;
-      width: 120px;
-      background: radial-gradient(circle, rgba(255,233,176,.55), rgba(255,233,176,0));
-      mix-blend-mode: screen;
-      transform: translateX(-100%);
-      transition: transform .36s cubic-bezier(.2,.8,.2,1);
-      pointer-events: none;
-    }
-
-    .meta {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      color: var(--muted);
-      font-size: 12px;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      padding: 0 4px;
-    }
-
-    .dots {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      min-width: 0;
-      overflow: hidden;
-    }
-
-    .dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 999px;
-      background: rgba(214, 177, 109, .28);
-      transition: transform .2s ease, background .2s ease, width .2s ease;
-      flex: 0 0 auto;
-    }
-
-    .dot.active {
-      width: 24px;
-      background: var(--gold);
-      box-shadow: 0 0 12px rgba(214, 177, 109, .55);
-    }
-
-    .hint {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 25;
-      background: rgba(8, 21, 37, .82);
-      color: var(--text);
-      border: 1px solid rgba(214, 177, 109, .26);
-      border-radius: 18px;
-      padding: 16px 18px;
-      box-shadow: 0 20px 50px rgba(0,0,0,.28);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      text-align: center;
-      font-size: 14px;
-      max-width: min(92vw, 360px);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity .2s ease;
-    }
-
-    .hint.show { opacity: 1; }
-
-    .hint strong {
-      display: block;
-      color: var(--gold);
-      margin-bottom: 6px;
-      letter-spacing: .04em;
-    }
-
-    .error {
-      position: absolute;
-      inset: auto 50% 96px auto;
-      transform: translateX(50%);
-      z-index: 30;
-      background: rgba(111, 23, 23, .88);
-      color: #fff3ef;
-      border: 1px solid rgba(255,255,255,.16);
-      border-radius: 16px;
-      padding: 12px 14px;
-      font-size: 13px;
-      max-width: min(92vw, 520px);
-      box-shadow: 0 18px 45px rgba(0,0,0,.35);
-      display: none;
-    }
-
-    .zoom-indicator {
-      position: absolute;
-      right: 22px;
-      bottom: 104px;
-      z-index: 22;
-      background: rgba(8, 21, 37, .7);
-      border: 1px solid rgba(214, 177, 109, .18);
-      color: var(--gold);
-      border-radius: 999px;
-      padding: 8px 12px;
-      font-size: 12px;
-      opacity: 0;
-      transform: translateY(6px);
-      transition: opacity .18s ease, transform .18s ease;
-      pointer-events: none;
-    }
-
-    .zoom-indicator.show { opacity: 1; transform: translateY(0); }
-
-    @media (max-width: 900px) {
-      .nav { width: 50px; height: 50px; }
-      .topbar { gap: 10px; }
-      .brand-text { max-width: 46vw; }
-    }
-
-    @media (max-width: 680px) {
-      .nav {
-        top: auto;
-        bottom: 94px;
-        transform: none;
-        width: 46px;
-        height: 46px;
-      }
-      .nav:hover, .nav:active { transform: none; }
-      .nav.prev { left: 16px; }
-      .nav.next { right: 16px; }
-      .meta { font-size: 11px; }
-      .status { display: none; }
-      .hint { font-size: 13px; }
-      .slide { border-radius: 10px; }
+    @media (orientation:landscape) and (max-width:1024px){
+      #viewer{padding:calc(var(--top-safe) + 36px) 8px calc(var(--bottom-safe) + 6px) 8px}
+      .topbar{margin-bottom:8px}.brand,.counter{padding:7px 11px}#progress-track{height:3px}#hint{display:none}
     }
   </style>
 </head>
 <body>
-  <div class="app" id="app">
-    <div class="topbar">
-      <div class="brand">
-        <span class="brand-mark"></span>
-        <span class="brand-text">Les Éditions Spiritueuses</span>
+  <div id="app">
+    <div class="hud">
+      <div class="topbar">
+        <div class="brand">Les Éditions Spiritueuses</div>
+        <div class="counter" id="counter">1 / 11</div>
       </div>
-      <div class="status"><strong id="counter">1 / 11</strong><span>Présentation partenaires</span></div>
+      <div id="progress-track"><div id="progress-bar"></div></div>
     </div>
 
-    <div class="viewer" id="viewer">
-      <button class="nav prev" id="prevBtn" aria-label="Slide précédente">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-      </button>
-
-      <div class="stage ready" id="stage">
-        <div class="film"></div>
-        <div class="slide-shell">
-          <img id="slideImg" class="slide" alt="Slide de présentation" draggable="false" />
-        </div>
-      </div>
-
-      <button class="nav next" id="nextBtn" aria-label="Slide suivante">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
-      </button>
-
-      <div class="hint show" id="hint">
-        <strong>Mode présentation</strong>
-        Balayez pour naviguer. Pincez ou double-tapez pour zoomer.
-      </div>
-
-      <div class="zoom-indicator" id="zoomIndicator">Zoom 100%</div>
-      <div class="error" id="errorBox"></div>
+    <div id="viewer">
+      <button id="prev" class="nav" aria-label="Slide précédente">←</button>
+      <div id="stage"><div id="slide-wrap"><img id="slide" src="" alt="Slide de présentation" /></div></div>
+      <button id="next" class="nav" aria-label="Slide suivante">→</button>
     </div>
 
-    <div class="bottombar">
-      <div class="progress-wrap">
-        <div class="progress-track">
-          <div class="progress-fill" id="progressFill"></div>
-          <div class="progress-glow" id="progressGlow"></div>
-        </div>
-      </div>
-      <div class="meta">
-        <div class="dots" id="dots"></div>
-        <div id="metaText">Slide 1 sur 11</div>
-      </div>
-    </div>
+    <div id="hint">← → · swipe · pincer pour zoomer</div>
+    <div id="fullscreen-tip">Touchez l’écran pour un affichage plus immersif</div>
+    <div id="zoom-badge">100%</div>
   </div>
 
   <script>
-    const TOTAL_SLIDES = 11;
-    const VERSION = '20260312b';
-    const slides = Array.from({ length: TOTAL_SLIDES }, (_, i) => `slides/slide${i + 1}.jpg?v=${VERSION}`);
+    const TOTAL = 11;
+    const VERSION = "20260312c";
+    const slides = Array.from({ length: TOTAL }, (_, i) => `slides/slide${i + 1}.jpg?v=${VERSION}`);
 
-    const stage = document.getElementById('stage');
-    const slideImg = document.getElementById('slideImg');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
+    const app = document.getElementById('app');
+    const slide = document.getElementById('slide');
     const counter = document.getElementById('counter');
-    const metaText = document.getElementById('metaText');
-    const progressFill = document.getElementById('progressFill');
-    const progressGlow = document.getElementById('progressGlow');
-    const dotsWrap = document.getElementById('dots');
-    const hint = document.getElementById('hint');
-    const errorBox = document.getElementById('errorBox');
-    const zoomIndicator = document.getElementById('zoomIndicator');
+    const prevBtn = document.getElementById('prev');
+    const nextBtn = document.getElementById('next');
+    const tip = document.getElementById('fullscreen-tip');
+    const zoomBadge = document.getElementById('zoom-badge');
 
-    let current = 0;
-    let scale = 1;
-    let translateX = 0;
-    let translateY = 0;
-    let startX = 0;
-    let startY = 0;
-    let isPointerDown = false;
-    let isDraggingZoom = false;
-    let dragStartX = 0;
-    let dragStartY = 0;
-    let imgStartX = 0;
-    let imgStartY = 0;
-    let lastTap = 0;
-    let hintTimeout;
+    let current = 0, scale = 1, panX = 0, panY = 0, lastTap = 0, animationLock = false;
+    let pointerDown = false, startX = 0, startY = 0, startPanX = 0, startPanY = 0;
+    let swipeStartX = 0, swipeStartY = 0, swipeTracking = false;
+    let pinchStartDistance = null, pinchStartScale = 1, zoomBadgeTimer = null, fullscreenAsked = false;
 
-    for (let i = 0; i < TOTAL_SLIDES; i++) {
-      const dot = document.createElement('span');
-      dot.className = 'dot';
-      dot.addEventListener('click', () => goTo(i));
-      dotsWrap.appendChild(dot);
+    function setAppHeight(){
+      document.documentElement.style.setProperty('--app-height', `${window.innerHeight}px`);
+      window.scrollTo(0,1);
     }
 
-    function showError(message) {
-      errorBox.textContent = message;
-      errorBox.style.display = 'block';
+    function updateUI(){
+      const percent = ((current + 1) / TOTAL) * 100;
+      document.documentElement.style.setProperty('--progress', `${percent}%`);
+      counter.textContent = `${current + 1} / ${TOTAL}`;
+      prevBtn.disabled = current === 0;
+      nextBtn.disabled = current === TOTAL - 1;
     }
 
-    function clearError() {
-      errorBox.style.display = 'none';
-      errorBox.textContent = '';
-    }
-
-    function updateZoomIndicator() {
-      zoomIndicator.textContent = `Zoom ${Math.round(scale * 100)}%`;
-      zoomIndicator.classList.add('show');
-      clearTimeout(updateZoomIndicator._t);
-      updateZoomIndicator._t = setTimeout(() => zoomIndicator.classList.remove('show'), 900);
-    }
-
-    function applyTransform() {
-      slideImg.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
-    }
-
-    function resetZoom(silent = true) {
-      scale = 1;
-      translateX = 0;
-      translateY = 0;
-      applyTransform();
-      if (!silent) updateZoomIndicator();
-    }
-
-    function clampTranslation() {
-      const rect = slideImg.getBoundingClientRect();
-      const maxX = Math.max(0, (rect.width * scale - rect.width) / 2);
-      const maxY = Math.max(0, (rect.height * scale - rect.height) / 2);
-      translateX = Math.min(maxX, Math.max(-maxX, translateX));
-      translateY = Math.min(maxY, Math.max(-maxY, translateY));
-    }
-
-    function setScale(newScale, originX = window.innerWidth / 2, originY = window.innerHeight / 2) {
-      const prevScale = scale;
-      scale = Math.max(1, Math.min(4, newScale));
-      const ratio = scale / prevScale;
-      const rect = slideImg.getBoundingClientRect();
-      const dx = originX - (rect.left + rect.width / 2);
-      const dy = originY - (rect.top + rect.height / 2);
-      translateX += dx * (ratio - 1);
-      translateY += dy * (ratio - 1);
-      clampTranslation();
-      applyTransform();
-      updateZoomIndicator();
-    }
-
-    function preloadAround(index) {
+    function preloadAround(index){
       [index - 1, index + 1].forEach(i => {
-        if (i >= 0 && i < slides.length) {
+        if (i >= 0 && i < TOTAL) {
           const img = new Image();
           img.src = slides[i];
         }
       });
     }
 
-    function updateUI() {
-      counter.textContent = `${current + 1} / ${TOTAL_SLIDES}`;
-      metaText.textContent = `Slide ${current + 1} sur ${TOTAL_SLIDES}`;
-      const pct = ((current + 1) / TOTAL_SLIDES) * 100;
-      progressFill.style.width = `${pct}%`;
-      progressGlow.style.transform = `translateX(calc(${pct}% - 60px))`;
-      [...dotsWrap.children].forEach((dot, i) => dot.classList.toggle('active', i === current));
-      prevBtn.disabled = current === 0;
-      nextBtn.disabled = current === TOTAL_SLIDES - 1;
+    function clampPan(){
+      const rect = slide.getBoundingClientRect();
+      const viewportW = app.clientWidth;
+      const viewportH = app.clientHeight;
+      const overflowX = Math.max(0, (rect.width - viewportW) / 2);
+      const overflowY = Math.max(0, (rect.height - viewportH) / 2);
+      panX = Math.max(-overflowX, Math.min(overflowX, panX));
+      panY = Math.max(-overflowY, Math.min(overflowY, panY));
     }
 
-    function cinematicSwap(src) {
-      clearError();
-      stage.classList.remove('ready');
-      stage.classList.add('cinematic');
+    function applyTransform(animate=false){
+      if (scale <= 1.001) {
+        scale = 1; panX = 0; panY = 0;
+      } else {
+        clampPan();
+      }
+      slide.style.transition = animate ? 'transform .18s ease' : 'transform .05s linear';
+      slide.style.transform = `translate3d(${panX}px, ${panY}px, 0) scale(${scale})`;
+    }
 
-      const loader = new Image();
-      loader.onload = () => {
-        slideImg.onload = null;
-        slideImg.src = src;
-        resetZoom(true);
-        requestAnimationFrame(() => {
-          stage.classList.remove('cinematic');
-          stage.classList.add('ready');
-        });
+    function showZoomBadge(){
+      zoomBadge.textContent = `${Math.round(scale * 100)}%`;
+      zoomBadge.classList.add('show');
+      clearTimeout(zoomBadgeTimer);
+      zoomBadgeTimer = setTimeout(() => zoomBadge.classList.remove('show'), 700);
+    }
+
+    function resetZoom(animated=false){
+      scale = 1; panX = 0; panY = 0;
+      applyTransform(animated);
+      showZoomBadge();
+    }
+
+    function setSlide(index){
+      if (index < 0 || index >= TOTAL || animationLock) return;
+      animationLock = true;
+      slide.classList.remove('cinema-in', 'cinema-out');
+      slide.style.transition = 'none';
+      slide.classList.add('cinema-out');
+
+      const nextSrc = slides[index];
+      const probe = new Image();
+      probe.onload = () => {
+        setTimeout(() => {
+          current = index;
+          slide.src = nextSrc;
+          resetZoom(false);
+          updateUI();
+          preloadAround(current);
+          slide.classList.remove('cinema-out');
+          void slide.offsetWidth;
+          slide.classList.add('cinema-in');
+          setTimeout(() => {
+            slide.classList.remove('cinema-in');
+            animationLock = false;
+          }, 430);
+        }, 120);
       };
-      loader.onerror = () => {
-        stage.classList.remove('cinematic');
-        stage.classList.add('ready');
-        showError(`Impossible de charger ${src}. Vérifiez le dossier slides et les noms des fichiers.`);
+      probe.onerror = () => {
+        animationLock = false;
+        alert(`Image introuvable : ${nextSrc}`);
       };
-      loader.src = src;
+      probe.src = nextSrc;
     }
 
-    function goTo(index) {
-      if (index < 0 || index >= TOTAL_SLIDES || index === current && slideImg.src) return;
-      current = index;
-      updateUI();
-      cinematicSwap(slides[current]);
-      preloadAround(current);
+    function nextSlide(){ if (current < TOTAL - 1) setSlide(current + 1); }
+    function prevSlide(){ if (current > 0) setSlide(current - 1); }
+    function distance(t1, t2){ return Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY); }
+
+    async function requestImmersiveMode(){
+      if (fullscreenAsked) return;
+      fullscreenAsked = true;
+      tip.classList.add('hidden');
+      const el = document.documentElement;
+      try {
+        if (el.requestFullscreen) {
+          await el.requestFullscreen({ navigationUI: 'hide' });
+        } else if (el.webkitRequestFullscreen) {
+          el.webkitRequestFullscreen();
+        }
+      } catch (e) {}
+      setTimeout(setAppHeight, 80);
     }
 
-    function next() { if (current < TOTAL_SLIDES - 1) goTo(current + 1); }
-    function prev() { if (current > 0) goTo(current - 1); }
-
-    prevBtn.addEventListener('click', prev);
-    nextBtn.addEventListener('click', next);
+    prevBtn.addEventListener('click', () => { requestImmersiveMode(); prevSlide(); });
+    nextBtn.addEventListener('click', () => { requestImmersiveMode(); nextSlide(); });
 
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') next();
-      if (e.key === 'ArrowLeft' || e.key === 'PageUp') prev();
-      if (e.key === '+' || e.key === '=') setScale(scale + 0.2);
-      if (e.key === '-') setScale(scale - 0.2);
-      if (e.key.toLowerCase() === 'z') resetZoom(false);
-      if (e.key.toLowerCase() === 'f') requestFullscreen();
+      if (e.key === 'ArrowRight') nextSlide();
+      if (e.key === 'ArrowLeft') prevSlide();
+      if (e.key === '+' || e.key === '=') { scale = Math.min(4, scale + 0.25); applyTransform(true); showZoomBadge(); }
+      if (e.key === '-') { scale = Math.max(1, scale - 0.25); applyTransform(true); showZoomBadge(); }
+      if (e.key === '0') resetZoom(true);
     });
 
-    function requestFullscreen() {
-      const root = document.documentElement;
-      const fn = root.requestFullscreen || root.webkitRequestFullscreen || root.msRequestFullscreen;
-      if (fn && !document.fullscreenElement) {
-        try { fn.call(root); } catch (_) {}
+    slide.addEventListener('dblclick', () => {
+      requestImmersiveMode();
+      if (scale > 1.01) resetZoom(true);
+      else { scale = 2; panX = 0; panY = 0; applyTransform(true); showZoomBadge(); }
+    });
+
+    slide.addEventListener('pointerdown', (e) => {
+      requestImmersiveMode();
+      pointerDown = true;
+      startX = e.clientX; startY = e.clientY; startPanX = panX; startPanY = panY;
+      if (scale <= 1.01) { swipeTracking = true; swipeStartX = e.clientX; swipeStartY = e.clientY; }
+      try { slide.setPointerCapture(e.pointerId); } catch (_) {}
+    });
+
+    slide.addEventListener('pointermove', (e) => {
+      if (!pointerDown || scale <= 1.01) return;
+      panX = startPanX + (e.clientX - startX);
+      panY = startPanY + (e.clientY - startY);
+      applyTransform(false);
+    });
+
+    function endPointer(e){
+      if (!pointerDown && !swipeTracking) return;
+      if (pointerDown && scale <= 1.01 && swipeTracking) {
+        const dx = e.clientX - swipeStartX;
+        const dy = e.clientY - swipeStartY;
+        if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.2) dx < 0 ? nextSlide() : prevSlide();
       }
+      pointerDown = false; swipeTracking = false;
+      try { slide.releasePointerCapture(e.pointerId); } catch (_) {}
     }
+    slide.addEventListener('pointerup', endPointer);
+    slide.addEventListener('pointercancel', endPointer);
 
-    function tryAutoFullscreen() {
-      const once = () => {
-        requestFullscreen();
-        window.removeEventListener('pointerdown', once);
-        window.removeEventListener('touchstart', once);
-      };
-      window.addEventListener('pointerdown', once, { once: true });
-      window.addEventListener('touchstart', once, { once: true });
-    }
-
-    function hideHintSoon() {
-      clearTimeout(hintTimeout);
-      hintTimeout = setTimeout(() => hint.classList.remove('show'), 2400);
-    }
-
-    stage.addEventListener('touchstart', (e) => {
-      if (e.touches.length === 1) {
-        const touch = e.touches[0];
-        startX = touch.clientX;
-        startY = touch.clientY;
-        isPointerDown = true;
-        if (scale > 1) {
-          isDraggingZoom = true;
-          dragStartX = touch.clientX;
-          dragStartY = touch.clientY;
-          imgStartX = translateX;
-          imgStartY = translateY;
-        }
-      } else if (e.touches.length === 2) {
-        stage._pinchDistance = Math.hypot(
-          e.touches[0].clientX - e.touches[1].clientX,
-          e.touches[0].clientY - e.touches[1].clientY
-        );
-        stage._pinchScale = scale;
-      }
-    }, { passive: true });
-
-    stage.addEventListener('touchmove', (e) => {
+    slide.addEventListener('touchstart', (e) => {
+      requestImmersiveMode();
       if (e.touches.length === 2) {
-        const dist = Math.hypot(
-          e.touches[0].clientX - e.touches[1].clientX,
-          e.touches[0].clientY - e.touches[1].clientY
-        );
-        if (stage._pinchDistance) {
-          const centerX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
-          const centerY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
-          setScale(stage._pinchScale * (dist / stage._pinchDistance), centerX, centerY);
-        }
-      } else if (e.touches.length === 1 && isDraggingZoom && scale > 1) {
-        const touch = e.touches[0];
-        translateX = imgStartX + (touch.clientX - dragStartX);
-        translateY = imgStartY + (touch.clientY - dragStartY);
-        clampTranslation();
-        applyTransform();
-      }
-    }, { passive: true });
-
-    stage.addEventListener('touchend', (e) => {
-      const now = Date.now();
-      if (e.touches.length === 0) {
-        if (isPointerDown && !isDraggingZoom && scale === 1) {
-          const touch = e.changedTouches[0];
-          const dx = touch.clientX - startX;
-          const dy = touch.clientY - startY;
-          if (Math.abs(dx) > 45 && Math.abs(dy) < 70) {
-            if (dx < 0) next(); else prev();
-          }
-        }
+        pinchStartDistance = distance(e.touches[0], e.touches[1]);
+        pinchStartScale = scale;
+      } else if (e.touches.length === 1) {
+        const now = Date.now();
         if (now - lastTap < 280) {
-          if (scale === 1) setScale(2, e.changedTouches[0].clientX, e.changedTouches[0].clientY);
-          else resetZoom(false);
+          if (scale > 1.01) resetZoom(true);
+          else { scale = 2; panX = 0; panY = 0; applyTransform(true); showZoomBadge(); }
+          e.preventDefault();
         }
         lastTap = now;
+        swipeStartX = e.touches[0].clientX;
+        swipeStartY = e.touches[0].clientY;
+        if (scale > 1.01) {
+          startX = e.touches[0].clientX; startY = e.touches[0].clientY;
+          startPanX = panX; startPanY = panY;
+        }
       }
-      isPointerDown = false;
-      isDraggingZoom = false;
-      stage._pinchDistance = null;
-      stage._pinchScale = scale;
-      hideHintSoon();
+    }, { passive:false });
+
+    slide.addEventListener('touchmove', (e) => {
+      if (e.touches.length === 2 && pinchStartDistance) {
+        const newDist = distance(e.touches[0], e.touches[1]);
+        scale = Math.min(4, Math.max(1, pinchStartScale * (newDist / pinchStartDistance)));
+        applyTransform(false);
+        showZoomBadge();
+        e.preventDefault();
+        return;
+      }
+      if (e.touches.length === 1 && scale > 1.01) {
+        panX = startPanX + (e.touches[0].clientX - startX);
+        panY = startPanY + (e.touches[0].clientY - startY);
+        applyTransform(false);
+        e.preventDefault();
+      }
+    }, { passive:false });
+
+    slide.addEventListener('touchend', (e) => {
+      if (pinchStartDistance) { pinchStartDistance = null; pinchStartScale = scale; return; }
+      if (scale <= 1.01) {
+        const touch = e.changedTouches[0];
+        if (!touch) return;
+        const dx = touch.clientX - swipeStartX;
+        const dy = touch.clientY - swipeStartY;
+        if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.2) dx < 0 ? nextSlide() : prevSlide();
+      }
     });
 
-    stage.addEventListener('wheel', (e) => {
-      e.preventDefault();
-      const delta = e.deltaY < 0 ? 0.16 : -0.16;
-      setScale(scale + delta, e.clientX, e.clientY);
-    }, { passive: false });
+    window.addEventListener('resize', () => { setAppHeight(); applyTransform(false); });
+    window.addEventListener('orientationchange', () => {
+      setTimeout(setAppHeight, 50);
+      setTimeout(setAppHeight, 350);
+      applyTransform(false);
+    });
+    document.addEventListener('fullscreenchange', setAppHeight);
 
-    stage.addEventListener('dblclick', (e) => {
-      if (scale === 1) setScale(2, e.clientX, e.clientY);
-      else resetZoom(false);
+    window.addEventListener('load', () => {
+      setAppHeight();
+      setTimeout(() => tip.classList.add('hidden'), 1800);
+      slide.src = slides[0];
+      updateUI();
+      preloadAround(0);
+      applyTransform(false);
     });
 
-    stage.addEventListener('pointerdown', (e) => {
-      if (scale <= 1) return;
-      isDraggingZoom = true;
-      dragStartX = e.clientX;
-      dragStartY = e.clientY;
-      imgStartX = translateX;
-      imgStartY = translateY;
-      stage.setPointerCapture?.(e.pointerId);
-    });
-
-    stage.addEventListener('pointermove', (e) => {
-      if (!isDraggingZoom || scale <= 1) return;
-      translateX = imgStartX + (e.clientX - dragStartX);
-      translateY = imgStartY + (e.clientY - dragStartY);
-      clampTranslation();
-      applyTransform();
-    });
-
-    stage.addEventListener('pointerup', () => {
-      isDraggingZoom = false;
-    });
-
-    window.addEventListener('resize', () => {
-      clampTranslation();
-      applyTransform();
-    });
-
-    slideImg.addEventListener('dragstart', (e) => e.preventDefault());
-
-    updateUI();
-    cinematicSwap(slides[0]);
-    preloadAround(0);
-    tryAutoFullscreen();
-    hideHintSoon();
+    document.body.addEventListener('click', () => requestImmersiveMode(), { once:true });
   </script>
 </body>
 </html>
